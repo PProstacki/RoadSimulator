@@ -2,24 +2,46 @@ package roadsimulator;
 
 public class Pedestrian extends RoadUser{
 
+    Pedestrian(int positionX, int positionY){
+        speed = 2;
+        marker = 'p';
+        this.positionX = positionX;
+        this.positionY = positionY;
+    }
+    
     @Override
     public int getSpeed() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return speed;
     }
 
     @Override
-    public int getMarker() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public char getMarker() {
+        return 'p';
     }
 
     @Override
     public int getPositionX() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return positionX;
     }
 
     @Override
     public int getPositionY() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return positionY;
+    }
+
+    @Override
+    public String toString() {
+        return "" + getMarker();
+    }
+
+    @Override
+    public void setPositionX(int positionX) {
+        this.positionX = positionX;
+    }
+
+    @Override
+    public void setPositionY(int positionY) {
+        this.positionY = positionY;
     }
     
 }
