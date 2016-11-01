@@ -29,7 +29,8 @@ public class RoadMovement {
 
             addToRoad();
             showRoad();
-
+            
+            gettingOff();
             move();
             if (crash == false) {
                 crash = crash();
@@ -37,6 +38,7 @@ public class RoadMovement {
 
             sc.nextLine();
         } while (!crash);
+        System.out.println("=================================================================");
         showRoad();
     }
 
@@ -69,7 +71,6 @@ public class RoadMovement {
         for (RoadUser user1 : usersList) {
             for (RoadUser user2 : usersList) {
                 if (user1.getPositionX() == user2.getPositionX() && user1.getPositionY() == user2.getPositionY() && user1 != user2) {
-                    road[user1.getPositionX()][user1.getPositionY()] = 'X';  // sygnalizowanie kraksy
                     return true;
                 }
             }
@@ -143,8 +144,6 @@ public class RoadMovement {
                         if (user.getPositionX() - user.getSpeed() > 0) {
                             user.setPositionX(user.getPositionX() - user.getSpeed());
                             isMoved = true;
-                            //start
-                            //if(road[user.getPositionX()][user.getPositionY()] != ' '){
                             if (user instanceof Pedestrian) {
                                 if (road[user.getPositionX()][user.getPositionY()] == 'c') {
                                     usersList.set(usersList.indexOf(user), new Car((Pedestrian) user));
@@ -153,10 +152,8 @@ public class RoadMovement {
                                 }
                             } else if (user instanceof Bike || user instanceof Car) {
                                 crash = true;
-                                road[user.getPositionX()][user.getPositionY()] = 'X';  // sygnalizowanie kraksy
                             }
-                            //}
-                            //koniec kopiowania
+
                         }
                     } else //prawo
                      if (user.getPositionX() + user.getSpeed() < road.length - 1) {
@@ -170,7 +167,6 @@ public class RoadMovement {
                                 }
                             } else if (user instanceof Bike || user instanceof Car) {
                                 crash = true;
-                                road[user.getPositionX()][user.getPositionY()] = 'X';  // sygnalizowanie kraksy
                             }
 
                         }
@@ -187,7 +183,6 @@ public class RoadMovement {
                                 }
                             } else if (user instanceof Bike || user instanceof Car) {
                                 crash = true;
-                                road[user.getPositionX()][user.getPositionY()] = 'X';  // sygnalizowanie kraksy
                             }
                         }
                     } else //dol
@@ -203,11 +198,42 @@ public class RoadMovement {
                                 }
                             } else if (user instanceof Bike || user instanceof Car) {
                                 crash = true;
-                                road[user.getPositionX()][user.getPositionY()] = 'X';  // sygnalizowanie kraksy
                             }
                         }
                     }
             } while (!isMoved);
+        }
+    }
+
+    private void gettingOff() {
+        Random r = new Random();
+        for (RoadUser user : usersList) {
+            if (r.nextInt(4) == 0) {
+                if (user instanceof Bike) {
+                    usersList.set(usersList.indexOf(user), ((Bike) user).dismount());
+                    road[user.getPositionX()][user.getPositionY()] = 'b';
+                } else if (user instanceof Car) {
+                    usersList.set(usersList.indexOf(user), ((Car) user).dismount());
+                    road[user.getPositionX()][user.getPositionY()] = 'c';
+                }
+                if (user.getPositionX() > 0 && road[user.getPositionX() - 1][user.getPositionY()] == ' ') {
+                    user.setPositionX(user.getPositionX() - 1);
+                    user.setPositionY(user.getPositionY());
+                } else if (user.getPositionX() < road.length - 1 && road[user.getPositionX() + 1][user.getPositionY()] == ' ') {
+                    user.setPositionX(user.getPositionX() + 1);
+                    user.setPositionY(user.getPositionY());
+                } else if (user.getPositionY() > 0 && road[user.getPositionX()][user.getPositionY() - 1] == ' ') {
+                    user.setPositionX(user.getPositionX());
+                    user.setPositionY(user.getPositionY() - 1);
+                } else if (user.getPositionY() < road[0].length - 1 && road[user.getPositionX()][user.getPositionY() + 1] == ' ') {
+                    user.setPositionX(user.getPositionX());
+                    user.setPositionY(user.getPositionY() + 1);
+                } else {
+                    crash = true;
+                    road[user.getPositionX()][user.getPositionY()] = 'X';
+                }
+ 
+            }
         }
     }
 

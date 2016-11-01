@@ -3,7 +3,7 @@ package roadsimulator;
 public class Pedestrian extends RoadUser{
 
     Pedestrian(int positionX, int positionY){
-        speed = 2;
+        speed = 1;
         marker = 'p';
         this.positionX = positionX;
         this.positionY = positionY;

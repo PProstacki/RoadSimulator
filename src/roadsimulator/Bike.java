@@ -3,13 +3,6 @@ package roadsimulator;
 public class Bike extends Vehicle{
     Pedestrian pedestrian;
     
-    /*Bike(){
-        speed = 3;
-        marker = 'r';
-        positionX = 0;
-        positionY = 0;
-    }*/
-    
     Bike(Pedestrian pedestrian){
         this.pedestrian = pedestrian;
         speed = 3;
@@ -50,5 +43,9 @@ public class Bike extends Vehicle{
     public void setPositionY(int positionY) {
         pedestrian.setPositionY(positionY);
     }
-                                                    //dopisanie nowej funkcjonalnosci
+
+    @Override
+    public Pedestrian dismount() {
+        return pedestrian;
+    }
 }
