@@ -8,11 +8,12 @@ public class RoadMovement {
 
     private LinkedList<RoadUser> usersList = new LinkedList();
     private char[][] road = new char[25][25];
+    boolean crash = false;
 
     public void start() {
         Random r = new Random();
         Scanner sc = new Scanner(System.in);
-        
+
         clearRoad();
         usersList.add(new Pedestrian(r.nextInt(road.length), r.nextInt(road[0].length)));
         usersList.add(new Pedestrian(r.nextInt(road.length), r.nextInt(road[0].length)));
@@ -21,18 +22,22 @@ public class RoadMovement {
         do {
             clearRoad();
             System.out.println("=================================================================");
-            
-            if(r.nextInt(4) == 0){
-            createPedestrian();
+
+            if (r.nextInt(4) == 0) {
+                createPedestrian();
             }
-            
+
             addToRoad();
             showRoad();
-            
+
             move();
-            
+            if (crash == false) {
+                crash = crash();
+            }
+
             sc.nextLine();
-        } while (!crash());
+        } while (!crash);
+        showRoad();
     }
 
     private void clearRoad() {
@@ -64,6 +69,7 @@ public class RoadMovement {
         for (RoadUser user1 : usersList) {
             for (RoadUser user2 : usersList) {
                 if (user1.getPositionX() == user2.getPositionX() && user1.getPositionY() == user2.getPositionY() && user1 != user2) {
+                    road[user1.getPositionX()][user1.getPositionY()] = 'X';  // sygnalizowanie kraksy
                     return true;
                 }
             }
@@ -137,25 +143,70 @@ public class RoadMovement {
                         if (user.getPositionX() - user.getSpeed() > 0) {
                             user.setPositionX(user.getPositionX() - user.getSpeed());
                             isMoved = true;
-                            
+                            //start
+                            //if(road[user.getPositionX()][user.getPositionY()] != ' '){
+                            if (user instanceof Pedestrian) {
+                                if (road[user.getPositionX()][user.getPositionY()] == 'c') {
+                                    usersList.set(usersList.indexOf(user), new Car((Pedestrian) user));
+                                } else if (road[user.getPositionX()][user.getPositionY()] == 'b') {
+                                    usersList.set(usersList.indexOf(user), new Bike((Pedestrian) user));
+                                }
+                            } else if (user instanceof Bike || user instanceof Car) {
+                                crash = true;
+                                road[user.getPositionX()][user.getPositionY()] = 'X';  // sygnalizowanie kraksy
+                            }
+                            //}
+                            //koniec kopiowania
                         }
                     } else //prawo
-                    if (user.getPositionX() + user.getSpeed() < road.length - 1) {
-                        user.setPositionX(user.getPositionX() + user.getSpeed());
-                        isMoved = true;
-                    }
+                     if (user.getPositionX() + user.getSpeed() < road.length - 1) {
+                            user.setPositionX(user.getPositionX() + user.getSpeed());
+                            isMoved = true;
+                            if (user instanceof Pedestrian) {
+                                if (road[user.getPositionX()][user.getPositionY()] == 'c') {
+                                    usersList.set(usersList.indexOf(user), new Car((Pedestrian) user));
+                                } else if (road[user.getPositionX()][user.getPositionY()] == 'b') {
+                                    usersList.set(usersList.indexOf(user), new Bike((Pedestrian) user));
+                                }
+                            } else if (user instanceof Bike || user instanceof Car) {
+                                crash = true;
+                                road[user.getPositionX()][user.getPositionY()] = 'X';  // sygnalizowanie kraksy
+                            }
+
+                        }
                 } else //gora dol
-                if (r.nextInt(2) == 0) {          //gora
-                    if(user.getPositionY() - user.getSpeed() > 0){
-                        user.setPositionY(user.getPositionY() - user.getSpeed());
-                        isMoved = true;
+                 if (r.nextInt(2) == 0) {          //gora
+                        if (user.getPositionY() - user.getSpeed() > 0) {
+                            user.setPositionY(user.getPositionY() - user.getSpeed());
+                            isMoved = true;
+                            if (user instanceof Pedestrian) {
+                                if (road[user.getPositionX()][user.getPositionY()] == 'c') {
+                                    usersList.set(usersList.indexOf(user), new Car((Pedestrian) user));
+                                } else if (road[user.getPositionX()][user.getPositionY()] == 'b') {
+                                    usersList.set(usersList.indexOf(user), new Bike((Pedestrian) user));
+                                }
+                            } else if (user instanceof Bike || user instanceof Car) {
+                                crash = true;
+                                road[user.getPositionX()][user.getPositionY()] = 'X';  // sygnalizowanie kraksy
+                            }
+                        }
+                    } else //dol
+                    {
+                        if (user.getPositionY() + user.getSpeed() < road[0].length - 1) {
+                            user.setPositionY(user.getPositionY() + user.getSpeed());
+                            isMoved = true;
+                            if (user instanceof Pedestrian) {
+                                if (road[user.getPositionX()][user.getPositionY()] == 'c') {
+                                    usersList.set(usersList.indexOf(user), new Car((Pedestrian) user));
+                                } else if (road[user.getPositionX()][user.getPositionY()] == 'b') {
+                                    usersList.set(usersList.indexOf(user), new Bike((Pedestrian) user));
+                                }
+                            } else if (user instanceof Bike || user instanceof Car) {
+                                crash = true;
+                                road[user.getPositionX()][user.getPositionY()] = 'X';  // sygnalizowanie kraksy
+                            }
+                        }
                     }
-                } else {                              //dol
-                    if(user.getPositionY() + user.getSpeed() < road[0].length - 1){
-                     user.setPositionY(user.getPositionY() + user.getSpeed());
-                     isMoved = true;
-                    }
-                }
             } while (!isMoved);
         }
     }

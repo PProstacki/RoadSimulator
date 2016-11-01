@@ -3,31 +3,37 @@ package roadsimulator;
 public class Bike extends Vehicle{
     Pedestrian pedestrian;
     
-    Bike(){
+    /*Bike(){
         speed = 3;
         marker = 'r';
         positionX = 0;
         positionY = 0;
+    }*/
+    
+    Bike(Pedestrian pedestrian){
+        this.pedestrian = pedestrian;
+        speed = 3;
+        marker = 'B';
     }
 
     @Override
     public int getSpeed() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return speed;
     }
 
     @Override
     public char getMarker() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return marker;
     }
 
     @Override
     public int getPositionX() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return pedestrian.getPositionX();
     }
 
     @Override
     public int getPositionY() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return pedestrian.getPositionY();
     }
 
     @Override
@@ -37,12 +43,12 @@ public class Bike extends Vehicle{
     
     @Override
     public void setPositionX(int positionX) {
-        this.positionX = positionX;
+        pedestrian.setPositionX(positionX);
     }
 
     @Override
     public void setPositionY(int positionY) {
-        this.positionY = positionY;
+        pedestrian.setPositionY(positionY);
     }
-    
+                                                    //dopisanie nowej funkcjonalnosci
 }
